@@ -149,3 +149,33 @@ class TestAccountService(TestCase):
             response.status_code,
             status.HTTP_405_METHOD_NOT_ALLOWED,
         )
+
+    
+    def test_update_account(self):
+        """It should Update an Account and save the changes"""
+        account = self._create_accounts(1)[0]
+        updated_account = account.serialize()
+        updated_account["name"] = "Updated Customer"
+
+        response = self.client.put(
+            f"{BASE_URL}/{account.id}",
+            json=updated_account,
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.get_json(), updated_account)
+
+        response = self.client.get(f"{BASE_URL}/{account.id}")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.get_json(), updated_account)
+
+
+
+    def test_update_account_not_found(self):
+        """It should return 404 when updating a missing Account"""
+        account = AccountFactory()
+        response = self.client.put(
+            f"{BASE_URL}/0",
+            json=account.serialize(),
+        )
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
