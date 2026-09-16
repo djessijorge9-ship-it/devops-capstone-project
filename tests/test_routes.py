@@ -197,3 +197,38 @@ class TestAccountService(TestCase):
         response = self.client.delete(f"{BASE_URL}/0")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(response.data, b"")
+
+
+    def test_list_accounts(self):
+        """It should List all Accounts"""
+        accounts = self._create_accounts(3)
+
+        response = self.client.get(BASE_URL)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertCountEqual(
+            response.get_json(),
+            [account.serialize() for account in accounts],
+        )
+
+    def test_list_accounts_empty(self):
+        """It should return an empty list when no Accounts exist"""
+        response = self.client.get(BASE_URL)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.get_json(), [])
+
+    def test_list_accounts_after_delete(self):
+        """It should exclude deleted Accounts from the list"""
+        accounts = self._create_accounts(3)
+
+        response = self.client.delete(f"{BASE_URL}/{accounts[0].id}")
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+
+        response = self.client.get(BASE_URL)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertCountEqual(
+            response.get_json(),
+            [account.serialize() for account in accounts[1:]],
+        )
