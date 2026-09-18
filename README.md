@@ -1,5 +1,7 @@
 # devops-capstone-project
 
+[![CI Build](https://github.com/djessijorge9-ship-it/devops-capstone-project/actions/workflows/ci-build.yaml/badge.svg)](https://github.com/djessijorge9-ship-it/devops-capstone-project/actions/workflows/ci-build.yaml)
+
 A Customer Accounts microservice project using Python, Flask, and PostgreSQL. This capstone covers Agile planning, test-driven development, GitHub Actions CI, security headers and CORS, Docker, Kubernetes, and a Tekton continuous delivery pipeline.
 
 ## Usage
