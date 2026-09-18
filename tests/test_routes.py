@@ -90,9 +90,7 @@ class TestAccountService(TestCase):
         """It should Create a new Account"""
         account = AccountFactory()
         response = self.client.post(
-            BASE_URL,
-            json=account.serialize(),
-            content_type="application/json"
+            BASE_URL, json=account.serialize(), content_type="application/json"
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
@@ -117,9 +115,7 @@ class TestAccountService(TestCase):
         """It should not Create an Account when sending the wrong media type"""
         account = AccountFactory()
         response = self.client.post(
-            BASE_URL,
-            json=account.serialize(),
-            content_type="test/html"
+            BASE_URL, json=account.serialize(), content_type="test/html"
         )
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
@@ -131,7 +127,6 @@ class TestAccountService(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.get_json(), account.serialize())
-
 
     def test_get_account_not_found(self):
         """It should return 404 for a missing Account"""
@@ -150,7 +145,6 @@ class TestAccountService(TestCase):
             status.HTTP_405_METHOD_NOT_ALLOWED,
         )
 
-    
     def test_update_account(self):
         """It should Update an Account and save the changes"""
         account = self._create_accounts(1)[0]
@@ -169,8 +163,6 @@ class TestAccountService(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.get_json(), updated_account)
 
-
-
     def test_update_account_not_found(self):
         """It should return 404 when updating a missing Account"""
         account = AccountFactory()
@@ -179,7 +171,6 @@ class TestAccountService(TestCase):
             json=account.serialize(),
         )
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
-
 
     def test_delete_account(self):
         """It should Delete an Account"""
@@ -197,7 +188,6 @@ class TestAccountService(TestCase):
         response = self.client.delete(f"{BASE_URL}/0")
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(response.data, b"")
-
 
     def test_list_accounts(self):
         """It should List all Accounts"""
